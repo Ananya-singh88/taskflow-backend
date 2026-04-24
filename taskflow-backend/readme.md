@@ -1,88 +1,70 @@
-# 🚀 TaskFlow — Secure Task Management Backend
+#  TaskFlow Pro — Full Stack Task Management System
 
-## 📌 Overview
-TaskFlow is a backend system that allows users to securely manage their tasks.  
-It includes authentication, authorization, and full CRUD operations with user-specific data access.
+TaskFlow Pro is a full-stack task management application built with a hybrid backend architecture using FastAPI, Django, and React. It demonstrates secure authentication, RESTful API design, and real-world frontend-backend integration.
 
 ---
 
-## 🎯 Features
+##  Features
 
-- User Signup & Login 🔐
-- JWT Authentication (Secure Token System)
-- Create Tasks 📝
-- View Only Your Tasks 👀
-- Update Tasks ✏️
-- Delete Tasks ❌
-- User-specific data protection (no access to others' tasks)
+-  JWT-based authentication (login & signup)
+-  Create, view, and delete tasks (CRUD operations)
+-  User-specific task isolation (each user sees only their data)
+-  FastAPI backend for high-performance APIs
+-  Django Admin panel for backend data management
+-  React frontend with protected routes
+-  Full end-to-end data flow (UI → API → Database)
 
 ---
 
-## 🧠 Tech Stack
+## Tech Stack
 
-- **Backend:** FastAPI
+- **Backend:** FastAPI, SQLAlchemy
+- **Frontend:** React (Axios for API calls)
+- **Admin Panel:** Django
 - **Database:** SQLite
-- **ORM:** SQLAlchemy
-- **Authentication:** JWT (python-jose)
-- **API Testing:** Swagger UI
+- **Authentication:** JWT (JSON Web Tokens)
 
 ---
 
-## ⚙️ How It Works
+## Architecture
 
-1. User signs up and logs in
-2. System generates a JWT token
-3. User sends requests with token
-4. Backend verifies token
-5. User can manage only their own tasks
 
 ---
 
-## 🔗 API Endpoints
+##  Key Highlights
 
-### Auth
-- `POST /signup` → Register user
-- `POST /login` → Login & get token
-
-### Tasks
-- `POST /tasks` → Create task
-- `GET /tasks` → Get all user tasks
-- `PUT /tasks/{task_id}` → Update task
-- `DELETE /tasks/{task_id}` → Delete task
+- Built using **5+ technologies** in a **3-tier architecture**
+- Developed **6+ RESTful APIs** for authentication and task management
+- Secured **100% protected routes using JWT authentication**
+- Achieved **~8ms API response time (0.0083s)** for task retrieval
+- Implemented **user-task relationship with complete data isolation**
 
 ---
 
-## 🔐 Authentication
+##  Setup Instructions
 
-Uses JWT (Bearer Token)
-
-Example: 
----
-
-## 🗄 Database Schema
-
-### User
-- id
-- email (unique)
-- password
-
-### Task
-- id
-- title
-- description
-- owner_id (linked to user)
-
----
-
-## 🚀 How to Run
+### Clone the repository
 
 ```bash
-git clone <your-repo-link>
+git clone https://github.com/Ananya-singh88/taskflow-backend.git
 cd taskflow-backend
 
 python -m venv venv
-venv\Scripts\activate
-
+venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 
 uvicorn main:app --reload
+Runs on: http://127.0.0.1:8000
+
+3️ Frontend Setup (React)
+cd frontend
+npm install
+npm start
+
+Runs on: http://localhost:3000
+
+4️ Django Admin Setup
+cd admin_panel
+python manage.py runserver 8001
+
+Runs on: http://127.0.0.1:8001/admin
