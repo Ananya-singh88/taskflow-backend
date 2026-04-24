@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-
+from fastapi import Form
 from database import SessionLocal
 from models import Task, User
 from routes.auth import get_current_user
@@ -17,13 +17,13 @@ def get_db():
 
 @router.post("/tasks")
 def create_task(
-    title: str,
-    description: str,
-    current_user: str = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    title: str = Form(...),
+    description: str = Form(...),
+    db: Session = Depends(get_db),
+    current_user: str = Depends(get_current_user)
 ):
 
-    user = db.query(User).filter(User.email == current_user).first()
+    user = db.query(User).filter(User.username == current_user).first()
 
     new_task = Task(
         title=title,
@@ -42,7 +42,7 @@ def get_tasks(
     current_user: str = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    user = db.query(User).filter(User.email == current_user).first()
+    user = db.query(User).filter(User.username == current_user).first()
 
     tasks = db.query(Task).filter(Task.owner_id == user.id).all()
 
@@ -56,7 +56,7 @@ def update_task(
     current_user: str = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    user = db.query(User).filter(User.email == current_user).first()
+    user = db.query(User).filter(User.username == current_user).first()
 
     task = db.query(Task).filter(Task.id == task_id).first()
 
@@ -79,7 +79,7 @@ def delete_task(
     current_user: str = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    user = db.query(User).filter(User.email == current_user).first()
+    user = db.query(User).filter(User.username == current_user).first()
 
     task = db.query(Task).filter(Task.id == task_id).first()
 

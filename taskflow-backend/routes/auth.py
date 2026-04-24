@@ -15,10 +15,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
+        username: str = payload.get("sub")
+        if username is None:
             raise HTTPException(status_code=401, detail="Invalid token")
-        return email
+        return username
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
@@ -43,16 +43,18 @@ def get_db():
         db.close()
 
 @router.post("/signup")
-def signup(email: str, password: str, db: Session = Depends(get_db)):
-    user = User(email=email, password=password)
+def signup(
+    username: str = Form(...),
+    password: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    user = User(username=username, password=password)
     db.add(user)
     db.commit()
     db.refresh(user)
     return {"message": "User created"}
 
 from fastapi import HTTPException
-
-@router.post("/login")
 
 
 @router.post("/login")
@@ -61,7 +63,7 @@ def login(
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    user = db.query(User).filter(User.email == username).first()
+    user = db.query(User).filter(User.username == username).first()
 
     if not user:
         raise HTTPException(status_code=400, detail="User not found")
@@ -69,17 +71,7 @@ def login(
     if user.password != password:
         raise HTTPException(status_code=400, detail="Incorrect password")
 
-    token = create_access_token({"sub": user.email})
+    token = create_access_token({"sub": user.username})
     return {"access_token": token, "token_type": "bearer"}
 
-    user = db.query(User).filter(User.email == email).first()
-
-    if not user:
-        raise HTTPException(status_code=400, detail="User not found")
-
-    if user.password != password:
-        raise HTTPException(status_code=400, detail="Incorrect password")
-
-    token = create_access_token({"sub": user.email})
-    return {"access_token": token, "token_type": "bearer"}
-
+   
